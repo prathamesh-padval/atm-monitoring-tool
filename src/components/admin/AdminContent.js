@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux';
+import {getDashboard} from '../../redux/actions/DashboardActions';
 
-export default class Admincontent extends Component {
+class Admincontent extends Component {
 
 
     constructor(props){
@@ -10,8 +12,17 @@ export default class Admincontent extends Component {
         }
     }
 
+    componentDidMount() {
+    if (!this.props.load) {
+          this.props.getDashboard()
+        }
+    }
+
 
     render() {
+
+        console.log(this.props)
+        const dashData = this.props.dashboard;
         return (
             <div>
         <main className="main-container">
@@ -65,7 +76,7 @@ export default class Admincontent extends Component {
                                                           <div className="row">
                                                               <div className="col-12 text-center">
                                                                 <div className="number">
-                                                                    <h2 className="counter">04</h2> 
+                                                                    <h2 className="counter">{dashData.bankCount}</h2> 
                                                                 </div> 
                                                               </div>
                                                            </div>
@@ -84,7 +95,7 @@ export default class Admincontent extends Component {
                                                         <div className="row">
                                                             <div className="col-12 text-center">
                                                               <div className="number">
-                                                                  <h2 className="counter">1539</h2> 
+                                                                  <h2 className="counter">{dashData.atmCount}</h2> 
                                                               </div> 
                                                             </div>
                                                          </div>
@@ -102,7 +113,7 @@ export default class Admincontent extends Component {
                                                         <div className="row">
                                                             <div className="col-12 text-center">
                                                               <div className="number">
-                                                                  <h2 className="counter">479</h2> 
+                                                                  <h2 className="counter">{dashData.lowCashAtm}</h2> 
                                                               </div> 
                                                             </div>
                                                          </div>
@@ -120,7 +131,7 @@ export default class Admincontent extends Component {
                                                         <div className="row">
                                                             <div className="col-12 text-center">
                                                               <div className="number">
-                                                                  <h2 className="counter">159</h2> 
+                                                                  <h2 className="counter">{dashData.outOfService}</h2> 
                                                               </div> 
                                                             </div>
                                                          </div>
@@ -252,3 +263,13 @@ export default class Admincontent extends Component {
         )
     }
 }
+
+
+const mapStateToProps =(state) =>{
+    return {
+        dashboard : state.dashboard,
+        load: state.loading,
+    }
+}
+
+export default connect(mapStateToProps,{getDashboard})(Admincontent);

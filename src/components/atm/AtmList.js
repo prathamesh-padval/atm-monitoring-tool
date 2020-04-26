@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import HeadNavFoot from "../../components/HeadNavFoot";
 import { Link } from "react-router-dom";
+import {connect} from 'react-redux';
+import {getAtms} from '../../redux/actions/AtmActions';
 
-export default class AtmList extends Component {
+class AtmList extends Component {
   constructor(props) {
     super(props); //since we are extending class Table so we have to use super in order to override Component class constructor
     console.log(props.location.state)
@@ -12,72 +14,41 @@ export default class AtmList extends Component {
       atmTestList: [
         {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "0",atmStatus: "0",},
         {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {
-          atmName: "ATMNAME",
-          atmId: "SBC001",
-          atmLocation: "Gandhi Bazar",
-          availableCash: 2000,
-          networkStatus: "1",
-          atmStatus: "0",
-        },
-        {
-          atmName: "ATMNAME",
-          atmId: "SBC001",
-          atmLocation: "Gandhi Bazar",
-          availableCash: 2000,
-          networkStatus: "1",
-          atmStatus: "0",
-        },
-        {
-          atmName: "ATMNAME",
-          atmId: "SBC001",
-          atmLocation: "Gandhi Bazar",
-          availableCash: 2000,
-          networkStatus: "1",
-          atmStatus: "0",
-        },
-        {
-          atmName: "ATMNAME",
-          atmId: "SBC001",
-          atmLocation: "Gandhi Bazar",
-          availableCash: 2000,
-          networkStatus: "1",
-          atmStatus: "0",
-        },
-        {
-          atmName: "ATMNAME",
-          atmId: "SBC001",
-          atmLocation: "Gandhi Bazar",
-          availableCash: 2000,
-          networkStatus: "0",
-          atmStatus: "0",
-        },
+        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
+        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
+        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
+        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
+        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "0",atmStatus: "0",},
       ],
     };
   }
 
+
+  componentDidMount() {
+    this.props.getAtms(this.props.location.state.item.tenantId);
+    const script = document.createElement("script");
+    script.src = `js/contentDatatable.js`;
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+
   renderTableData() {
-    return this.state.atmTestList.map((atmValue, atmIndex) => {
-      const {
-        atmName,
-        atmId,
-        atmLocation,
-        availableCash,
-        networkStatus,
-        atmStatus,
-      } = atmValue; //destructuring
+    // return this.state.atmTestList.map((atmValue, atmIndex) => {
+      return this.props.atmList.map((atmValue, atmIndex) => {
+      const {atmName,atmId,atmLocation,availableCash,atmStatus,} = atmValue; //destructuring
       return (
         <tr key={atmName}>
           <td>
             {" "}
-            <Link to="/">{atmName}</Link>
+            <Link to="#" style={{ color: "black" }} >{atmName}</Link>
           </td>
           <td>{atmId}</td>
           <td>{atmLocation}</td>
           <td>{availableCash}</td>
 
           <td>
-            {networkStatus != 0 ? (
+            {atmStatus != 0 ? (
               <span className="approve">In-service</span>
             ) : (
               <span className="reject">Out-of-Service</span>
@@ -99,14 +70,7 @@ export default class AtmList extends Component {
       );
     });
   }
-  componentDidMount() {
-    const script = document.createElement("script");
 
-    script.src = `js/contentDatatable.js`;
-    script.async = true;
-
-    document.body.appendChild(script);
-  }
 
   render() {
 
@@ -256,3 +220,12 @@ export default class AtmList extends Component {
     );
   }
 }
+
+
+const mapStateToProps = state =>{
+  return{
+    atmList : state.atms
+  }
+}
+
+export default connect(mapStateToProps,{getAtms})(AtmList);

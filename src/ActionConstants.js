@@ -1,1 +1,5 @@
-export const getBanksData = "getBankData";
+export const getBanksData = "getBanksData";
+
+export const getAtmsData = "getAtmsData";
+
+export const getDashboardData = "getDashboardData";

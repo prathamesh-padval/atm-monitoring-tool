@@ -20,9 +20,24 @@ class BankList extends Component {
       ],
     };
   }
+
+
+  componentDidMount() {
+    if (!this.props.load) {
+      this.props.getBanks();
+    }
+
+    const script = document.createElement("script");
+    script.src = `js/contentDatatable.js`;
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+
+  
   renderTableData() {
-    return this.state.banksTestList.map((bankValue, bankkey) => {
-    // return this.props.banks.map((bankValue, bankkey) => {
+    // return this.state.banksTestList.map((bankValue, bankkey) => {
+    return this.props.banks.map((bankValue, bankkey) => {
       const { bank, activeAtms, inactiveAtms } = bankValue; //destructuring
       const { bankName, bankStatus } = bank;
       return (
@@ -51,16 +66,7 @@ class BankList extends Component {
       );
     });
   }
-  componentDidMount() {
-    if (!this.props.load) {
-      this.props.getBanks();
-    }
-
-    const script = document.createElement("script");
-    script.src = `js/contentDatatable.js`;
-    script.async = true;
-    document.body.appendChild(script);
-  }
+  
 
   render() {
     console.log(this.props);
