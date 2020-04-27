@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import $ from "jquery";
+// import $ from "jquery";
 
 import { Link } from "react-router-dom";
 
@@ -75,7 +75,7 @@ export default class Sidebar extends Component {
                   </div>
                 </li>
                 <li>
-                  <Link to="/atmList" className="dropnav">
+                  <Link to="#" className="dropnav">
                     {/* <!-- <img src="../images/icon/reports.png"> --> */}
                     <svg
                       viewBox="0 0 512 512"

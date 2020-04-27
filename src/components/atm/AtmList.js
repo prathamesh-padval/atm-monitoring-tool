@@ -36,19 +36,20 @@ class AtmList extends Component {
   renderTableData() {
     // return this.state.atmTestList.map((atmValue, atmIndex) => {
       return this.props.atmList.map((atmValue, atmIndex) => {
+        const bankName = this.state.bank.bankName;
       const {atmName,atmId,atmLocation,availableCash,atmStatus,} = atmValue; //destructuring
       return (
         <tr key={atmName}>
           <td>
             {" "}
-            <Link to="#" style={{ color: "black" }} >{atmName}</Link>
+            <Link to={{pathname:"/atmDetails" , state:{item:atmValue, bankName : bankName }}} style={{ color: "black" }} >{atmName}</Link>
           </td>
           <td>{atmId}</td>
           <td>{atmLocation}</td>
           <td>{availableCash}</td>
 
           <td>
-            {atmStatus != 0 ? (
+            {atmStatus !== 0 ? (
               <span className="approve">In-service</span>
             ) : (
               <span className="reject">Out-of-Service</span>

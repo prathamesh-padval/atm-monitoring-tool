@@ -22,7 +22,7 @@ class BankList extends Component {
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
     if (!this.props.load) {
       this.props.getBanks();
     }
@@ -34,7 +34,7 @@ class BankList extends Component {
   }
 
 
-  
+
   renderTableData() {
     // return this.state.banksTestList.map((bankValue, bankkey) => {
     return this.props.banks.map((bankValue, bankkey) => {
@@ -51,7 +51,7 @@ class BankList extends Component {
           <td>{activeAtms}</td>
           <td>{inactiveAtms}</td>
           <td>
-            {bankStatus != 0 ? (
+            {bankStatus !== 0 ? (
               <span className="approve">Active</span>
             ) : (
               <span className="reject">InActive</span>
