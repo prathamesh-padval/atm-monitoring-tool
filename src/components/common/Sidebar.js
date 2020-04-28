@@ -36,7 +36,7 @@ export default class Sidebar extends Component {
                 </li>
 
                 <li>
-                  <Link to="/bankList" className="dropnav">
+                  <Link to="/banks" className="dropnav">
                     <svg
                       viewBox="-46 0 512 512"
                       xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +75,7 @@ export default class Sidebar extends Component {
                   </div>
                 </li>
                 <li>
-                  <Link to="#" className="dropnav">
+                  <Link to="/atm/add" className="dropnav">
                     {/* <!-- <img src="../images/icon/reports.png"> --> */}
                     <svg
                       viewBox="0 0 512 512"

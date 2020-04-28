@@ -1,15 +1,83 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom'
 import HeadNavFoot from "../HeadNavFoot";
+import {
+  yesno,
+  states,
+  cardholderAuthCapability,
+  cardholderAuthMode,
+  cardCaptureCapability,
+  cardDataInputCapability,
+  cardDataOutputCapability,
+  cardholderAuthEntity,
+  cardHolderData,
+  cardPresentData,
+  cardDataInputMode,
+  terminalOperatingEnv,
+  terminalDataOutputCapability,
+  pinCaptureCapability,
+  types,
+} from "./AtmConstants";
 
 export default class AtmDetails extends Component {
-
-    constructor(props){
-        super(props);
-        this.state={
-            bankName : props.location.state.bankName,
-            atm : props.location.state.item
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      bank: props.location.state.bank,
+      atm: props.location.state.item,
+      // bankName: "SDCC",
+      // atm: {
+      //   id: 162,
+      //   tenantId: 11011,
+      //   atmId: "ATMV000124",
+      //   luno: "0124",
+      //   ip: "172.21.0.134",
+      //   typeDenom1: 100,
+      //   typeDenom2: 100,
+      //   typeDenom3: 100,
+      //   typeDenom4: 1000,
+      //   type1Count: 1000,
+      //   type2Count: 1000,
+      //   type3Count: 1000,
+      //   type4Count: 1000,
+      //   atmStatus: 0,
+      //   transactionCount: 0,
+      //   atmType: "NDC",
+      //   dipCard: "Y",
+      //   tmk: "02",
+      //   encTpk: "06",
+      //   lastEncTpk: "@lenc",
+      //   keyExchangeDt: "2019-11-17T18:30:00.000+0000",
+      //   keyExchangeTime: 0,
+      //   keyExchangeDurationInMin: 1,
+      //   dynamicKeyExchange: "N",
+      //   sessionKey: "  abc ",
+      //   isBNA: "Y",
+      //   vasYN: "N",
+      //   downloadFileName: "CustomisationData_dip_rec_JPG.ini",
+      //   atmName: "TEST",
+      //   atmLocation: "MUMBAI",
+      //   atmState: "MH",
+      //   atmCountry: "IN",
+      //   cardAuthCap: 2,
+      //   cardAuthMode: 2,
+      //   cardCaptureCap: 0,
+      //   cardDataCap: 1,
+      //   cardDataOutCap: 0,
+      //   cardholderAuth: 0,
+      //   cardholderData: 1,
+      //   cardInputMode: 2,
+      //   cardPresentData: 2,
+      //   atmPincode: 412201,
+      //   terminalOpEnv: 0,
+      //   terminalOutCap: 3,
+      //   pincaptureCap: 3,
+      //   posData: 0,
+      //   isEMV: false,
+      //   availableCash: 1300000,
+      // },
+    };
+  }
   componentDidMount() {
     const script = document.createElement("script");
     script.src = `js/effectScripts.js`;
@@ -17,9 +85,14 @@ export default class AtmDetails extends Component {
     document.body.appendChild(script);
   }
 
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state);
+  };
+
   render() {
-      console.log(this.state)
-    const bankName = this.state.bankName;
+    console.log(this.state);
+    const bank = this.state.bank;
     const atm = this.state.atm;
     return (
       <div>
@@ -42,13 +115,13 @@ export default class AtmDetails extends Component {
                           <div className="breadcrumb">
                             <ul className="lst-breadcrumb">
                               <li>
-                                <a href="/bankList">Banks</a>
+                                <Link to="/banks">Banks</Link>
                               </li>
                               <li>
-                                <a href="javascript:;">{bankName}</a>
+                                <Link to={{pathname : "/bankdetails", state : {item : bank}}}>{bank.bankName}</Link>
                               </li>
                               <li>
-                                <a href="javascript:;">{bankName} ATM List</a>
+                                <Link to={{pathname : "" ,}}>{bank.bankName} ATM List</Link>
                               </li>
                               <li>View ATM</li>
                             </ul>
@@ -71,10 +144,7 @@ export default class AtmDetails extends Component {
                               {/* .dt-header */}
                             </div>
                             <div className="grid-header1 text-left">
-                              <button
-                                className="button float-right"
-                                onClick=" location.href='#' "
-                              >
+                              <button className="button float-right edit1">
                                 Edit
                               </button>
                               <button
@@ -500,15 +570,19 @@ export default class AtmDetails extends Component {
                                             <span>Status</span>
                                           </h5>
                                           <label className="selection p-10">
-                                            <h5 className="approve">Active</h5>
-                                          </label>
-                                          <label className="selection p-10">
-                                            <h5 className="reject">Inactive</h5>
-                                          </label>
-                                          <label className="selection p-10">
-                                            <h5 className="out">
-                                              Out of Services
-                                            </h5>
+                                            {atm.atmStatus === 0 ? (
+                                              <h5 className="approve">
+                                                Active
+                                              </h5>
+                                            ) : atm.atmStatus === 1 ? (
+                                              <h5 className="reject">
+                                                Inactive
+                                              </h5>
+                                            ) : (
+                                              <h5 className="out">
+                                                Out of Services
+                                              </h5>
+                                            )}
                                           </label>
                                         </div>
                                       </div>
@@ -611,7 +685,7 @@ export default class AtmDetails extends Component {
                                                       </option>
                                                       <option
                                                         value="Online"
-                                                        selected="selected" 
+                                                        // selected="selected"
                                                       >
                                                         Online
                                                       </option>
@@ -627,16 +701,11 @@ export default class AtmDetails extends Component {
                                                     <label className="label-top">
                                                       <em>*</em>ATM Type
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value={atm.atmType}
-                                                        selected="selected"
-                                                      >
-                                                        {atm.atmType}
-                                                      </option>
+                                                    <select
+                                                      defaultValue={atm.atmType}
+                                                      disabled
+                                                    >
+                                                      {types()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -654,7 +723,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={atm.tenantId}
+                                                      defaultValue={
+                                                        atm.tenantId
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -668,18 +739,11 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>ATM Dipcard Card
                                                       Reader
                                                     </label>
-                                                    <select defaultValue={atm.dipCard} disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Yes"
-                                                      >
-                                                        Yes
-                                                      </option>
-                                                      <option value="No">
-                                                        No
-                                                      </option>
+                                                    <select
+                                                      defaultValue={atm.dipCard}
+                                                      disabled
+                                                    >
+                                                      {yesno()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -693,18 +757,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>ATM Dyanamic Key
                                                       Exchange
                                                     </label>
-                                                    <select defaultValue={atm.dynamicKeyExchange} disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Y"
-                                                      >
-                                                        Yes
-                                                      </option>
-                                                      <option value="N">
-                                                        No
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.dynamicKeyExchange
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {yesno()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -723,7 +782,7 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={atm.encTpk}
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -736,18 +795,11 @@ export default class AtmDetails extends Component {
                                                     <label className="label-top">
                                                       <em>*</em>ATM is BNA
                                                     </label>
-                                                    <select defaultValue={atm.isBNA} disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Y"
-                                                      >
-                                                        Yes
-                                                      </option>
-                                                      <option value="N">
-                                                        No
-                                                      </option>
+                                                    <select
+                                                      defaultValue={atm.isBNA}
+                                                      disabled
+                                                    >
+                                                      {yesno()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -779,16 +831,14 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>ATM is EMV
                                                       Enable ?
                                                     </label>
-                                                    <select defaultValue={atm.isEMV} disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Y"
-                                                      >
+                                                    <select
+                                                      defaultValue={atm.isEMV}
+                                                      disabled
+                                                    >
+                                                      <option value="true">
                                                         Yes
                                                       </option>
-                                                      <option value="N">
+                                                      <option value="false">
                                                         No
                                                       </option>
                                                     </select>
@@ -811,20 +861,11 @@ export default class AtmDetails extends Component {
                                                     <label className="label-top">
                                                       <em>*</em>ATM Type
                                                     </label>
-                                                    <select defaultValue={atm.atmType} disabled>
-                                                      <option  value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="NDC"
-                                                      >
-                                                        NDC
-                                                      </option>
-                                                      <option
-                                                        value="D912"
-                                                      >
-                                                        D912
-                                                      </option>
+                                                    <select
+                                                      defaultValue={atm.atmType}
+                                                      disabled
+                                                    >
+                                                      {types()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -856,7 +897,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={atm.atmLocation}
+                                                      defaultValue={
+                                                        atm.atmLocation
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -871,12 +914,15 @@ export default class AtmDetails extends Component {
                                                     <label className="label-top">
                                                       <em>*</em>ATM State
                                                     </label>
-                                                    <input
-                                                      type="text"
+                                                    <select
                                                       required
-                                                      defaultValue={atm.atmState}
+                                                      defaultValue={
+                                                        atm.atmState
+                                                      }
                                                       disabled
-                                                    />
+                                                    >
+                                                      {states()}
+                                                    </select>
                                                     <u />
                                                     <em className="field-message">
                                                       {" "}
@@ -891,7 +937,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={atm.atmCountry}
+                                                      defaultValue={
+                                                        atm.atmCountry
+                                                      }
                                                       disabled
                                                     />
                                                     {/* <select disabled>
@@ -919,7 +967,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={atm.atmPincode}
+                                                      defaultValue={
+                                                        atm.atmPincode
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -938,7 +988,11 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="White House Walk"
+                                                      defaultValue={atm.atmName
+                                                        .concat(" ")
+                                                        .concat(
+                                                          atm.atmLocation
+                                                        )}
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -990,7 +1044,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={
+                                                        atm.sessionKey
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1007,7 +1063,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={
+                                                        atm.lastEncTpk
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1044,8 +1102,13 @@ export default class AtmDetails extends Component {
                                                       className="datepicker1"
                                                       type="text"
                                                       placeholder="DD/MM/YYYY"
-                                                      defaultValue="12/04/2020"
-                                                      disabled
+                                                      defaultValue={
+                                                        atm.keyExchangeDt
+                                                      }
+                                                      // disabled
+                                                      onClick={
+                                                        this.handleChange
+                                                      }
                                                     />
                                                     <a className="calendar disabled" />
                                                     <em className="field-message">
@@ -1062,7 +1125,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="-"
+                                                      defaultValue={
+                                                        atm.keyExchangeTime
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1079,7 +1144,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={30}
+                                                      defaultValue={
+                                                        atm.keyExchangeDurationInMin
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1104,7 +1171,7 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={atm.tmk}
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1120,7 +1187,7 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={atm.tmkCom1}
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1136,7 +1203,7 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue="1234 1B1B 5678 1C1C"
+                                                      defaultValue={atm.tmkCom1}
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1155,7 +1222,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={1211}
+                                                      defaultValue={
+                                                        atm.transactionCount
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1369,7 +1438,9 @@ export default class AtmDetails extends Component {
                                                     <input
                                                       type="text"
                                                       required
-                                                      defaultValue={atm.downloadFileName}
+                                                      defaultValue={
+                                                        atm.downloadFileName
+                                                      }
                                                       disabled
                                                     />
                                                     <em className="field-message">
@@ -1385,18 +1456,11 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Value Addition
                                                       Service(VAS)
                                                     </label>
-                                                    <select defaultValue={atm.vasYN} disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Y"
-                                                      >
-                                                        Yes
-                                                      </option>
-                                                      <option value="N">
-                                                        No
-                                                      </option>
+                                                    <select
+                                                      defaultValue={atm.vasYN}
+                                                      disabled
+                                                    >
+                                                      {yesno()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1418,16 +1482,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Holder
                                                       Authentication Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="PIN Entry"
-                                                        selected="selected"
-                                                      >
-                                                        PIN Entry
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardAuthCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardholderAuthCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1441,16 +1502,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Capture
                                                       Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Capture Capability"
-                                                        selected="selected"
-                                                      >
-                                                        Capture Capability
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardCaptureCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardCaptureCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1464,16 +1522,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Terminal
                                                       Operational Environment
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="No Terminal Used"
-                                                        selected="selected"
-                                                      >
-                                                        No Terminal Used
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.terminalOpEnv
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {terminalOperatingEnv()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1489,16 +1544,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Holder
                                                       Present Data
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Cardholder Present"
-                                                        selected="selected"
-                                                      >
-                                                        Cardholder Present
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardholderData
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardHolderData()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1512,16 +1564,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Present
                                                       Data
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Card Present Data"
-                                                        selected="selected"
-                                                      >
-                                                        Card Present Data
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardPresentData
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardPresentData()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1535,16 +1584,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Data Input
                                                       Mode
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="E-Commerce"
-                                                        selected="selected"
-                                                      >
-                                                        E-Commerce
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardDataInputMode
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardDataInputMode()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1560,16 +1606,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Holder
                                                       Authentication Method
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Not Authenticate"
-                                                        selected="selected"
-                                                      >
-                                                        Not Authenticated
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardholderAuth
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardholderAuthMode()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1581,18 +1624,15 @@ export default class AtmDetails extends Component {
                                                   <div className="ux-component ux-readonly">
                                                     <label className="label-top">
                                                       <em>*</em>Card Holder
-                                                      Authentication Entry
+                                                      Authentication Entity
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="ICC"
-                                                        selected="selected"
-                                                      >
-                                                        ICC
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardholderAuth
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardholderAuthEntity()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1606,16 +1646,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Data Output
                                                       Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="ICC Write"
-                                                        selected="selected"
-                                                      >
-                                                        ICC Write
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardDataOutCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardDataOutputCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1631,16 +1668,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Terminal Data
                                                       Output Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Print Capability"
-                                                        selected="selected"
-                                                      >
-                                                        Print Capability
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.terminalOutCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {terminalDataOutputCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1654,16 +1688,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>PIN Capture
                                                       Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="1-4 Chars Maximum"
-                                                        selected="selected"
-                                                      >
-                                                        1-4 Chars Maximum
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.pincaptureCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {pinCaptureCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">
@@ -1677,16 +1708,13 @@ export default class AtmDetails extends Component {
                                                       <em>*</em>Card Data Input
                                                       Capability
                                                     </label>
-                                                    <select disabled>
-                                                      <option value="Select">
-                                                        Select
-                                                      </option>
-                                                      <option
-                                                        value="Key Entered"
-                                                        selected="selected"
-                                                      >
-                                                        Key Entered
-                                                      </option>
+                                                    <select
+                                                      defaultValue={
+                                                        atm.cardDataCap
+                                                      }
+                                                      disabled
+                                                    >
+                                                      {cardDataInputCapability()}
                                                     </select>
                                                     <u />
                                                     <em className="field-message">

@@ -1,10 +1,13 @@
 const remoteApi = "http://localhost:8081/api/";
 
+
 // const remoteApi = "/api/";
 
 export const authUrl = remoteApi+"authenticate";
 
 export const getBanksUrl = remoteApi+"get-banks";
+
+export const getBankDashUrl = remoteApi+"bank-dashboard";
 
 export const getAtmsUrl = remoteApi+"get-atms";
 

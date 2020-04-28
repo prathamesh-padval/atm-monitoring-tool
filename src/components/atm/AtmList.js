@@ -1,80 +1,144 @@
 import React, { Component } from "react";
 import HeadNavFoot from "../../components/HeadNavFoot";
 import { Link } from "react-router-dom";
-import {connect} from 'react-redux';
-import {getAtms} from '../../redux/actions/AtmActions';
+import { connect } from "react-redux";
+import { getAtms } from "../../redux/actions/AtmActions";
 
 class AtmList extends Component {
   constructor(props) {
     super(props); //since we are extending class Table so we have to use super in order to override Component class constructor
-    console.log(props.location.state)
+    console.log(props.location.state);
     this.state = {
-      bank : props.location.state.item,
+      atms: this.props.location.state.atms,
+      bank: props.location.state.item
       //state is by default an object
-      atmTestList: [
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "0",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "1",atmStatus: "0",},
-        {atmName: "ATMNAME",atmId: "SBC001",atmLocation: "Gandhi Bazar",availableCash: 2000,networkStatus: "0",atmStatus: "0",},
-      ],
-    };
   }
-
+}
 
   componentDidMount() {
-    this.props.getAtms(this.props.location.state.item.tenantId);
+    if (this.state.atms === undefined) {
+      this.props.getAtms(this.props.location.state.item.tenantId);
+    }
     const script = document.createElement("script");
     script.src = `js/contentDatatable.js`;
     script.async = true;
     document.body.appendChild(script);
   }
 
-
   renderTableData() {
     // return this.state.atmTestList.map((atmValue, atmIndex) => {
+    console.log(typeof this.state.atms)  
+    const bank = this.state.bank;
+    if (this.state.atms === undefined) {
+      console.log("If")
       return this.props.atmList.map((atmValue, atmIndex) => {
-        const bankName = this.state.bank.bankName;
-      const {atmName,atmId,atmLocation,availableCash,atmStatus,} = atmValue; //destructuring
-      return (
-        <tr key={atmName}>
-          <td>
-            {" "}
-            <Link to={{pathname:"/atmDetails" , state:{item:atmValue, bankName : bankName }}} style={{ color: "black" }} >{atmName}</Link>
-          </td>
-          <td>{atmId}</td>
-          <td>{atmLocation}</td>
-          <td>{availableCash}</td>
+        const {
+          atmName,
+          atmId,
+          atmLocation,
+          availableCash,
+          atmStatus,
+        } = atmValue; //destructuring
+        return (
+          <tr key={atmName}>
+            <td>
+              {" "}
+              <Link
+                to={{
+                  pathname: "/atmdetails",
+                  state: { item: atmValue, bank: bank },
+                }}
+                style={{ color: "black" }}
+              >
+                {atmName}
+              </Link>
+            </td>
+            <td>{atmId}</td>
+            <td>{atmLocation}</td>
+            <td>{availableCash}</td>
 
-          <td>
-            {atmStatus !== 0 ? (
-              <span className="approve">In-service</span>
-            ) : (
-              <span className="reject">Out-of-Service</span>
-            )}
-          </td>
-          <td>
-            {atmStatus != 0 ? (
-              <span className="approve">Active</span>
-            ) : (
-              <span className="reject">InActive</span>
-            )}
-          </td>
-          <td>
-            <a href="#" className="viewbtn">
-              <img src="../images/icon/view.png" alt="view" />
-            </a>
-          </td>
-        </tr>
-      );
-    });
+            <td>
+              {atmStatus === 0 ? (
+                <span className="approve">In-service</span>
+              ) : (
+                <span className="reject">Out-of-Service</span>
+              )}
+            </td>
+            <td>
+              {atmStatus === 0 ? (
+                <span className="approve">Active</span>
+              ) : atmStatus === 1 ? (
+                <span className="reject">Inactive</span>
+              ) : (
+                <span className="out">Out-Of-Service</span>
+              )}
+            </td>
+            <td>
+              <a href="#" className="viewbtn">
+                <img src="../images/icon/view.png" alt="view" />
+              </a>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      console.log("ELSE")
+      
+      return this.state.atms.map((atmValue, atmIndex) => {
+        
+        const {
+          atmName,
+          atmId,
+          atmLocation,
+          availableCash,
+          atmStatus,
+        } = atmValue; //destructuring
+        return (
+          <tr key={atmName}>
+            <td>
+              {" "}
+              <Link
+                to={{
+                  pathname: "/atmdetails",
+                  state: { item: atmValue, bank: bank },
+                }}
+                style={{ color: "black" }}
+              >
+                {atmName}
+              </Link>
+            </td>
+            <td>{atmId}</td>
+            <td>{atmLocation}</td>
+            <td>{availableCash}</td>
+
+            <td>
+              {atmStatus === 0 ? (
+                <span className="approve">In-service</span>
+              ) : (
+                <span className="reject">Out-of-Service</span>
+              )}
+            </td>
+            <td>
+              {atmStatus === 0 ? (
+                <span className="approve">Active</span>
+              ) : atmStatus === 1 ? (
+                <span className="reject">Inactive</span>
+              ) : (
+                <span className="out">Out-Of-Service</span>
+              )}
+            </td>
+            <td>
+              <a href="#" className="viewbtn">
+                <img src="../images/icon/view.png" alt="view" />
+              </a>
+            </td>
+          </tr>
+        );
+      });
+    }
   }
 
-
   render() {
-
     const bankName = this.state.bank.bankName;
     return (
       <div className="page-wrapper">
@@ -96,10 +160,10 @@ class AtmList extends Component {
                           <div className="breadcrumb">
                             <ul className="lst-breadcrumb">
                               <li>
-                                <a href="/bankList">Banks</a>
+                                <Link to="/banks">Banks</Link>
                               </li>
                               <li>
-                                <a href="/">{bankName}</a>
+                                <Link to={{pathname : "/bankdetails", state : {item : this.state.bank}}}>{bankName}</Link>
                               </li>
                               <li>{bankName} ATM List</li>
                             </ul>
@@ -193,7 +257,6 @@ class AtmList extends Component {
                           <div className="vspacer50" />
                           {/*============================ grid container ends ============================*/}
                           {/*================================ Footer code starts Here ================================*/}
-                          
                         </div>
                         {/* .in-mcontainer */}
                       </div>
@@ -222,11 +285,10 @@ class AtmList extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    atmList: state.atms,
+  };
+};
 
-const mapStateToProps = state =>{
-  return{
-    atmList : state.atms
-  }
-}
-
-export default connect(mapStateToProps,{getAtms})(AtmList);
+export default connect(mapStateToProps, { getAtms })(AtmList);

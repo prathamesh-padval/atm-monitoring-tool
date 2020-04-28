@@ -22,7 +22,7 @@ class BankList extends Component {
   }
 
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.load) {
       this.props.getBanks();
     }
@@ -44,7 +44,7 @@ class BankList extends Component {
         <tr key={bankName}>
           <td>
             {" "}
-            <Link to={{pathname:"/atmList" , state:{item:bank}}} style={{ color: "black" }}>
+            <Link to={{pathname:"/bankdetails" , state:{item:bank}}} style={{ color: "black" }}>
               {bankName}
             </Link>
           </td>
@@ -74,7 +74,7 @@ class BankList extends Component {
     // const bankOptions = this.props.banks.map((bankItem, i) => {
     //   return (
     //     <option value={bankItem.bank.bankName}>
-    //       <Link to="/atmList">{bankItem.bank.bankName}</Link>
+    //       <Link to="/atms">{bankItem.bank.bankName}</Link>
     //     </option>
     //   );
     // });
@@ -227,4 +227,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getBanks })(BankList);
+export default connect(mapStateToProps, { getBanks })( BankList );

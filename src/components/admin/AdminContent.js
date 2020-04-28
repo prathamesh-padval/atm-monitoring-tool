@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import {getDashboard} from '../../redux/actions/DashboardActions';
+import { Link } from 'react-router-dom';
 
 class Admincontent extends Component {
 
@@ -72,7 +73,7 @@ class Admincontent extends Component {
                                                <div className="row">
                                                   <div className="col-xl-3 col-lg-3 col-sm-6 col-12">
                                                       <div className="widget-box wb-single medium">
-                                                         <a href="/bankList"> 
+                                                         <Link to="/banks"> 
                                                           <div className="row">
                                                               <div className="col-12 text-center">
                                                                 <div className="number">
@@ -87,7 +88,7 @@ class Admincontent extends Component {
                                                           </div> 
                                                           </div>
                                                          </div>
-                                                        </a> 
+                                                        </Link> 
                                                       </div> 
                                                   </div>
                                                   <div className="col-xl-3 col-lg-3 col-sm-6 col-12">

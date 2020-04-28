@@ -1150,21 +1150,4 @@ $("ul li a.button1.secondary").on("click", function(){
      });
 
 
-
-$('button.edit1').on('click', function() { 
-    // alert();
-    if ( !$( '.ux-component input' ).parent('.ux-component').has( '.ux-readonly' ) ) {
-$('.ux-component input').parent('.ux-component').addClass('ux-readonly');
-$('.ux-component input').attr('disabled','disabled');
-$('.ux-component select').parent('.ux-component').addClass('ux-readonly');
-$('.ux-component select').attr('disabled','disabled');
-
-}
-
-else{
-        $('.ux-component input').parent('.ux-component').removeClass('ux-readonly'); 
-        $('.ux-component input').removeAttr('disabled','disabled');
-        $('.ux-component select').parent('.ux-component').removeClass('ux-readonly'); 
-        $('.ux-component select').removeAttr('disabled','disabled');
-}
- })
+	 
